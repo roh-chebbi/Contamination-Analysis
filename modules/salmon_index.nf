@@ -8,7 +8,7 @@ process SALMON_INDEX {
     val index_name
 
     output:
-    file 'salmon_index'
+    path "$index_name", emit: index_ch
     script:
     """
     salmon index -t ${transcriptome}  -i ${index_name} -k31
