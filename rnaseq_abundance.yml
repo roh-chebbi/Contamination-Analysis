@@ -1,0 +1,10 @@
+name: rnaseq_abundance
+channels:
+  - conda-forge
+  - defaults
+  - bioconda
+dependencies:
+  - r-base=4.4
+  - r-tximport
+  - r-genomicfeatures
+  - r-argparse
