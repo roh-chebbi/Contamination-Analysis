@@ -6,9 +6,17 @@ library(tibble)
 library(stringr)
 library(org.Hs.eg.db)
 library(AnnotationDbi)
+library(argparse)
 
-txi.salmon <- readRDS("/opt/localdata/rchebbi/27jan_boise/Contamination_Analysis/bin/tximport_results.rds")
+parser <- ArgumentParser(description='Process Salmon expression data for CIBERSORT input')
+parser$add_argument('-i', '--input', required=TRUE, help='Path to tximport RDS file')
+parser$add_argument('-o', '--output', required=TRUE, help='Output file name/path')
+args <- parser$parse_args()
+
+txi.salmon <- readRDS("/opt/localdata/rchebbi/27jan_boise/Contamination_Analysis/results/abundance/txi_salmon.RDS")
+
 gene_expression <- txi.salmon$abundance
+
 #filter out genes with zero expression
 gene_expression <- gene_expression[rowSums(gene_expression) > 1, ]
 

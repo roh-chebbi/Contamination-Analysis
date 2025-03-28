@@ -15,6 +15,7 @@ params.gtf = "/opt/localdata/rchebbi/27jan_boise/salmon/reference_data/Homo_sapi
 params.input_csv = "data/SampleSheet.csv"
 
 
+
 workflow {
 
 
@@ -32,11 +33,11 @@ workflow {
 
     SALMON_QUANT(SALMON_INDEX.out.index_ch, reads_ch)
 
-    //ABUNDANCE()
+    ABUNDANCE()
 
-    //CONVERT_SYMBOLS()
+    CONVERT_SYMBOLS(ABUNDANCE.out.abundance_results)
 
-    //CIBERSORT()
+    CIBERSORT(CONVERT_SYMBOLS.out.cibersort_input)
 
 
 

@@ -1,22 +1,20 @@
 #!/usr/bin/env nextflow
 
+params.outdir = "results/abundance"
+
 process ABUNDANCE {
-    conda "rnaseq.yml"
-    publishDir "results/abundance", mode: 'copy'
-    
-    input:
-    path gtf
-    val quant_info
-    
+    publishDir params.outdir, mode: 'copy'
     
     output:
     path "count_matrix.tsv", emit: counts
-    path "tximport_results.rds", emit: rds
+    path "tximport_results.rds", emit: abundance_results
+
     
     script:
+    
+
     """
-    def quant_string = quant_info.collect { id, dir -> "$id:$dir" }.join(",")
-    ${baseDir}/bin/abundance.R --gtf ${gtf} --quant_info ${quant_info}
+    ${baseDir}/bin/abundance.R --quant_dir ${baseDir}/results/quant
 
     
     """
