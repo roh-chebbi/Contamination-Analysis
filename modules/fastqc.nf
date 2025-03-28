@@ -1,20 +1,21 @@
 #!/usr/bin/env nextflow
+params.outdir = 'results/fastqc'
 
 process FASTQC {
     conda "rnaseq.yml"
-    publishDir "results/fastqc", mode: 'copy'
+    publishDir params.outdir, mode: 'copy'
 
     input:
-    path reads
+    tuple val(sample_id), path(read1), path(read2)
 
     output:
-    path "${reads.simpleName}_fastqc.zip", emit: zip
-    path "${reads.simpleName}_fastqc.html", emit: html
+    path "*_fastqc.zip", emit: zip
+    path "*_fastqc.html", emit: html
 
     script:
     """
-    echo "Running FASTQC on $reads"
-    fastqc $reads
+    echo "Running FASTQC on $sample_id"
+    fastqc $read1 $read2
     """
 
 }

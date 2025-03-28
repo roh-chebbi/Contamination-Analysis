@@ -1,17 +1,18 @@
 #!/usr/bin/env nextflow
 
+params.outdir = 'results/quant'
+
 process SALMON_QUANT {
     conda "rnaseq.yml"
-    publishDir "results/salmon/quant", mode: 'copy'
-    tag "$sample_id"
+    publishDir params.outdir, mode: 'copy'
     cpus 4
 
     input:
     path index
-    tuple val(sample_id), path(reads)   
+    tuple val(sample_id), path(read1), path(read2)   
 
     output:
-    path "${sample_id}", emit: quant
+    path "${sample_id}", emit: quant_ch
     script:
     """
     echo "Processing sample $sample_id"
@@ -21,8 +22,8 @@ process SALMON_QUANT {
     	--libType A \
     	--validateMappings \
     	--output ${sample_id} \
-    	-1 ${reads[0]} \
-    	-2 ${reads[1]}
+    	-1 ${read1} \
+    	-2 ${read2}
 
     """
 

@@ -8,14 +8,23 @@ library(GenomicFeatures)
 # Set up command-line arguments
 parser <- ArgumentParser(description='TXimport count processing')
 parser$add_argument('--gtf', required=TRUE, help='Path to GTF file')
-parser$add_argument('--quant_dir', required=TRUE, help='Salmon quant directory')
+parser$add_argument('--quant_info', required=TRUE, help='Salmon quant directory')
 parser$add_argument('--output_counts', default='count_matrix.tsv', help='Output count matrix')
 parser$add_argument('--output_rds', default='tximport_results.rds', help='Output RDS object')
 args <- parser$parse_args()
 
-# Validate inputs
-stopifnot(file.exists(args$gtf))
-stopifnot(dir.exists(args$quant_dir))
+# Process quant_info input
+sample_pairs <- unlist(strsplit(args$quant_info, ","))
+samples <- list()
+files <- list()
+
+for(pair in sample_pairs) {
+  parts <- unlist(strsplit(pair, ":"))
+  sample_id <- parts[1]
+  quant_dir <- parts[2]
+  samples[[sample_id]] <- quant_dir
+  files[[sample_id]] <- file.path(quant_dir, "quant.sf")
+}
 
 # Generate tx2gene mapping
 #txdb <- makeTxDbFromGFF(args$gtf)

@@ -1,8 +1,10 @@
 #!/usr/bin/env nextflow
 
+params.outdir = 'results/index'
+
 process SALMON_INDEX {
     conda "rnaseq.yml"
-    publishDir "results/salmon", mode: 'copy'
+    publishDir params.outdir, mode: 'copy'
     input:
     path transcriptome
     val index_name
